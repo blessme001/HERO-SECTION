@@ -1,497 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blessme - Creative Developer</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMS Tech — Fullstack Developer & Creative Technologist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          navy: { DEFAULT:'#0a1628', deep:'#050d1a', mid:'#1a2f4a', light:'#25405f' },
+          beige: { DEFAULT:'#f5f5dc', dim:'#d4b896', bright:'#ece5bd' },
+          crimson: { DEFAULT:'#dc3545', light:'#ff6b7a', bright:'#ff8494' },
+        },
+        fontFamily: {
+          display: ['Syne','sans-serif'],
+          body: ['DM Sans','sans-serif'],
+        },
+      }
+    }
+  }
+</script>
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: linear-gradient(160deg, #050d1a 0%, #0a1628 40%, #1a2f4a 100%);
+    font-family: 'DM Sans', sans-serif;
+    color: #f5f5dc;
+    overflow-x: hidden;
+  }
 
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow-x: hidden;
-            background: linear-gradient(135deg, #0a1628 0%, #1a2f4a 100%);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        }
+  /* ===== GLASSMORPHISM CORE ===== */
+  .glass {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .glass-red {
+    background: rgba(220,53,69,0.08);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(220,53,69,0.25);
+  }
+  .glass-card {
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: all .4s cubic-bezier(.4,0,.2,1);
+  }
+  .glass-card:hover {
+    border-color: rgba(220,53,69,0.35);
+    background: rgba(255,255,255,0.06);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(220,53,69,0.08);
+  }
+  .glass-nav {
+    background: rgba(5,13,26,0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
 
-        /* ===== HERO SECTION ===== */
-        .hero {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            background: linear-gradient(135deg, #0a1628 0%, #1a2f4a 100%);
-        }
+  .grad-text {
+    background: linear-gradient(92.55deg, #ff6b7a 0%, #dc3545 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .grad-text-beige {
+    background: linear-gradient(92.55deg, #ece5bd 0%, #d4b896 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 
-        /* ===== VIDEO BACKGROUND ===== */
-        .hero-video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: 0;
-            opacity: 0.7;
-        }
+  .font-display { font-family: 'Syne', sans-serif; }
 
-        /* ===== 3D CANVAS BACKGROUND ===== */
-        #canvas-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            display: none;
-        }
+  @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.4;transform:scale(.7);} }
+  .pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
 
-        /* Overlay gradient - Navy/Blue tint */
-        .hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 50% 50%, rgba(10, 22, 40, 0.3), rgba(10, 22, 40, 0.7));
-            z-index: 2;
-            pointer-events: none;
-        }
+  @keyframes fadeInUp {
+    from { opacity:0; transform:translateY(30px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  .reveal { opacity:0; transform:translateY(40px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
 
-        /* ===== FLOWING GRID BACKGROUND ===== */
-        .grid-bg {
-            position: absolute;
-            inset: 0;
-            z-index: 1;
-            opacity: 0.3;
-        }
+  @keyframes flow-h { 0%{transform:translateX(-100%);} 100%{transform:translateX(100%);} }
+  @keyframes flow-v { 0%{transform:translateY(-100%);} 100%{transform:translateY(100%);} }
+  .grid-line { position:absolute; background:linear-gradient(90deg,transparent,rgba(220,53,69,.5) 50%,transparent); animation:flow-h 8s linear infinite; }
+  .grid-line.vertical { width:1px; height:100%; background:linear-gradient(180deg,transparent,rgba(220,53,69,.4) 50%,transparent); animation:flow-v 8s linear infinite; }
 
-        .grid-line {
-            position: absolute;
-            background: linear-gradient(90deg, transparent, rgba(220, 53, 69, 0.5) 50%, transparent);
-            animation: flow-h 8s linear infinite;
-        }
+  .hero-video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.7; z-index:0; }
 
-        .grid-line.vertical {
-            width: 1px;
-            height: 100%;
-            background: linear-gradient(180deg, transparent, rgba(220, 53, 69, 0.4) 50%, transparent);
-            animation: flow-v 8s linear infinite;
-        }
+  /* Carousel */
+  .carousel-slide { position:absolute; inset:0; opacity:0; transition:opacity .5s ease; }
+  .carousel-slide.active { opacity:1; }
+  .carousel-dot { width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.25); cursor:pointer; transition:all .3s; }
+  .carousel-dot.active { background:#dc3545; transform:scale(1.4); }
 
-        @keyframes flow-h {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        @keyframes flow-v {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100%); }
-        }
-
-        /* ===== CONTENT ===== */
-        .hero-content {
-            position: relative;
-            z-index: 3;
-            text-align: center;
-            color: #fff;
-            max-width: 900px;
-            padding: 3rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .announcement {
-            display: inline-block;
-            margin-bottom: 2rem;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease-out 0.2s forwards;
-        }
-
-        .announcement-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 18px;
-            border: 1px solid rgba(220, 53, 69, 0.4);
-            border-radius: 8px;
-            background: rgba(220, 53, 69, 0.1);
-            backdrop-filter: blur(10px);
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: #ff6b7a;
-        }
-
-        .announcement-badge::before {
-            content: '';
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #ff6b7a;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        h1 {
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            font-weight: 600;
-            line-height: 1.1;
-            letter-spacing: -0.02em;
-            margin: 2rem 0;
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
-        }
-
-        .word {
-            display: inline-block;
-            opacity: 0;
-            animation: fadeInUp 0.6s ease-out forwards;
-            margin-right: 0.15em;
-        }
-
-        .word:nth-child(1) { animation-delay: 0.3s; }
-        .word:nth-child(2) { animation-delay: 0.4s; }
-        .word:nth-child(3) { animation-delay: 0.5s; }
-        .word:nth-child(4) { animation-delay: 0.6s; }
-        .word:nth-child(5) { animation-delay: 0.7s; }
-
-        .gradient-text {
-            background: linear-gradient(92.55deg, #ff6b7a 0%, #dc3545 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px) blur(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) blur(0);
-            }
-        }
-
-        p {
-            font-size: clamp(1rem, 2vw, 1.2rem);
-            color: rgba(248, 248, 248, 0.7);
-            line-height: 1.6;
-            max-width: 600px;
-            margin: 1.5rem auto 2.5rem;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease-out 0.8s forwards;
-        }
-
-        /* ===== CTA BUTTONS ===== */
-        .cta-buttons {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease-out 1s forwards;
-        }
-
-        .btn {
-            padding: 14px 32px;
-            border-radius: 10px;
-            font-family: 'Courier New', monospace;
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            border: none;
-            display: inline-block;
-            backdrop-filter: blur(10px);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #ff6b7a 0%, #dc3545 100%);
-            color: #fff;
-            box-shadow: 0 8px 32px rgba(220, 53, 69, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 40px rgba(220, 53, 69, 0.5);
-            background: linear-gradient(135deg, #ff8494 0%, #e74c56 100%);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.08);
-            color: #f5f5dc;
-            border: 1.5px solid rgba(245, 245, 220, 0.3);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(220, 53, 69, 0.6);
-            color: #ff6b7a;
-            box-shadow: 0 8px 32px rgba(220, 53, 69, 0.2);
-        }
-
-        /* ===== SCROLL INDICATOR ===== */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 4;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-
-        .scroll-arrow {
-            width: 20px;
-            color: rgba(248, 248, 248, 0.5);
-            font-size: 24px;
-            animation: bounce 2s ease-in-out infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(8px); }
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .btn {
-                width: 100%;
-                max-width: 300px;
-            }
-        }
-    </style>
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #050d1a; }
+  ::-webkit-scrollbar-thumb { background: #dc3545; border-radius: 10px; }
+</style>
 </head>
-<body>
-    <section class="hero">
-        <!-- Video Background -->
-        <video autoplay muted playsinline class="hero-video">
-            <source src="tech-bg-01.mp4" type="video/mp4">
-        </video>
+<body class="antialiased">
 
-        <!-- 3D Canvas Background -->
-        <canvas id="canvas-bg"></canvas>
+<!-- ============ NAVBAR ============ -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 glass-nav transition-all duration-300">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12 h-16 flex items-center justify-between">
+    <div class="font-display font-extrabold text-lg tracking-wide">
+      <span class="grad-text">BMS</span><span class="text-beige"> TECH</span>
+    </div>
+    <ul class="hidden md:flex gap-8 text-xs uppercase tracking-widest font-medium text-beige/60">
+      <li><a href="#about" class="hover:text-crimson-light transition">About</a></li>
+      <li><a href="#projects" class="hover:text-crimson-light transition">Projects</a></li>
+      <li><a href="#services" class="hover:text-crimson-light transition">Services</a></li>
+      <li><a href="#gallery" class="hover:text-crimson-light transition">Gallery</a></li>
+      <li><a href="#contact" class="hover:text-crimson-light transition">Contact</a></li>
+    </ul>
+    <a href="#contact" class="hidden md:inline-block glass-red px-5 py-2 rounded-lg text-xs font-display font-bold uppercase tracking-wider text-crimson-light hover:bg-crimson/20 transition">Hire Me</a>
+    <button id="hamburger" class="md:hidden flex flex-col gap-1.5 w-7">
+      <span class="block h-0.5 bg-beige rounded-full transition"></span>
+      <span class="block h-0.5 bg-beige rounded-full transition"></span>
+      <span class="block h-0.5 bg-beige rounded-full transition"></span>
+    </button>
+  </div>
+  <div id="mobileMenu" class="md:hidden hidden flex-col gap-4 px-6 pb-6 glass-nav">
+    <a href="#about" class="mobile-link text-beige/70 py-1">About</a>
+    <a href="#projects" class="mobile-link text-beige/70 py-1">Projects</a>
+    <a href="#services" class="mobile-link text-beige/70 py-1">Services</a>
+    <a href="#gallery" class="mobile-link text-beige/70 py-1">Gallery</a>
+    <a href="#contact" class="mobile-link text-beige/70 py-1">Contact</a>
+  </div>
+</nav>
 
-        <!-- Grid Background -->
-        <div class="grid-bg" id="grid-bg"></div>
+<!-- ============ HERO ============ -->
+<section class="relative w-full h-screen flex items-center justify-center overflow-hidden">
+  <video autoplay muted playsinline class="hero-video">
+    <source src="tech-bg-01.mp4" type="video/mp4">
+  </video>
 
-        <!-- Content -->
-        <div class="hero-content">
-            <div class="announcement">
-                <div class="announcement-badge">Now Building With AI</div>
-            </div>
+  <div class="absolute inset-0 z-[2] pointer-events-none" style="background:radial-gradient(circle at 50% 50%, rgba(10,22,40,.3), rgba(10,22,40,.75));"></div>
 
-            <h1>
-                <span class="word">Building</span>
-                <span class="word">real-time</span>
-                <span class="word">interactive</span>
-                <span class="word">experiences,</span>
-                <span class="word"><span class="gradient-text">end-to-end</span></span>
-            </h1>
+  <div class="grid-bg absolute inset-0 z-[1] opacity-40" id="grid-bg"></div>
 
-            <p>Fullstack developer & creative technologist. I build fast, animated, and interactive web experiences that push the boundaries of what's possible on the web.</p>
+  <div class="relative z-[3] max-w-3xl mx-auto text-center px-6 py-12 rounded-3xl glass shadow-2xl">
+    <div class="reveal inline-flex items-center gap-2 glass-red px-4 py-2 rounded-lg text-[11px] font-bold uppercase tracking-widest text-crimson-light mb-8">
+      <span class="w-2 h-2 rounded-full bg-crimson-light pulse-dot"></span>
+      Available for New Projects
+    </div>
 
-            <div class="cta-buttons">
-                <button class="btn btn-primary">View My Work</button>
-                <button class="btn btn-secondary">Get In Touch</button>
-            </div>
-        </div>
+    <h1 class="font-display font-extrabold leading-[1.05] tracking-tight text-4xl md:text-6xl lg:text-7xl mb-6 reveal" style="transition-delay:.1s">
+      Building real-time <span class="grad-text">interactive experiences</span>, end-to-end
+    </h1>
 
-        <!-- Scroll Indicator -->
-        <div class="scroll-indicator">
-            <span class="scroll-arrow">↓</span>
-        </div>
-    </section>
+    <p class="text-beige/70 text-base md:text-lg leading-relaxed max-w-xl mx-auto mb-10 reveal" style="transition-delay:.2s">
+      Fullstack developer &amp; creative technologist based in Nigeria. Tech Support · Web Development · Device Consulting. I build fast, animated, interactive web experiences — and solve real tech problems for real people.
+    </p>
 
-    <!-- Three.js for 3D Canvas -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- GSAP for advanced animations -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <div class="flex flex-wrap gap-4 justify-center reveal" style="transition-delay:.3s">
+      <a href="#projects" class="px-8 py-3.5 rounded-xl font-display font-bold text-xs uppercase tracking-widest text-white shadow-lg transition-all hover:-translate-y-1"
+         style="background:linear-gradient(135deg,#ff6b7a,#dc3545); box-shadow:0 8px 32px rgba(220,53,69,.35);">
+        View My Work
+      </a>
+      <a href="#contact" class="px-8 py-3.5 rounded-xl font-display font-bold text-xs uppercase tracking-widest glass text-beige hover:border-crimson-light/60 hover:text-crimson-light transition-all hover:-translate-y-1">
+        Get In Touch
+      </a>
+    </div>
 
-    <script>
-        // ===== 3D CANVAS BACKGROUND =====
-        const canvas = document.getElementById('canvas-bg');
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    <div class="flex justify-center gap-10 mt-10 pt-8 border-t border-white/10 reveal" style="transition-delay:.4s">
+      <div><div class="font-display font-extrabold text-2xl grad-text">3+</div><div class="text-[11px] uppercase tracking-wider text-beige/50">Years Experience</div></div>
+      <div><div class="font-display font-extrabold text-2xl grad-text">20+</div><div class="text-[11px] uppercase tracking-wider text-beige/50">Projects Shipped</div></div>
+      <div><div class="font-display font-extrabold text-2xl grad-text">100%</div><div class="text-[11px] uppercase tracking-wider text-beige/50">Client Satisfaction</div></div>
+    </div>
+  </div>
 
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
+  <div class="scroll-indicator absolute bottom-8 left-1/2 -translate-x-1/2 z-[4] cursor-pointer">
+    <span class="block text-beige/40 text-2xl" style="animation:bounce 2s ease-in-out infinite;">↓</span>
+  </div>
+</section>
 
-        camera.position.z = 5;
-
-        // Create particles
-        const particlesGeometry = new THREE.BufferGeometry();
-        const particleCount = 1000;
-        const positionArray = new Float32Array(particleCount * 3);
-
-        for (let i = 0; i < particleCount * 3; i += 3) {
-            positionArray[i] = (Math.random() - 0.5) * 2000;
-            positionArray[i + 1] = (Math.random() - 0.5) * 2000;
-            positionArray[i + 2] = (Math.random() - 0.5) * 2000;
-        }
-
-        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positionArray, 3));
-
-        // Particle material
-        const particlesMaterial = new THREE.PointsMaterial({
-            size: 10,
-            color: 0xc7c099,
-            sizeAttenuation: true,
-            transparent: true,
-            opacity: 0.5
-        });
-
-        const particles = new THREE.Points(particlesGeometry, particlesMaterial);
-        scene.add(particles);
-
-        // Mouse position tracking
-        let mouseX = 0;
-        let mouseY = 0;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-        });
-
-        // Animation loop
-        const animate = () => {
-            requestAnimationFrame(animate);
-
-            particles.rotation.x += 0.0001;
-            particles.rotation.y += 0.0002;
-            particles.position.x = mouseX * 50;
-            particles.position.y = mouseY * 50;
-
-            renderer.render(scene, camera);
-        };
-
-        animate();
-
-        // Handle window resize
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // ===== GENERATE GRID LINES =====
-        function generateGrid() {
-            const gridBg = document.getElementById('grid-bg');
-            const spacing = window.innerWidth / 8;
-
-            // Vertical lines
-            for (let i = 0; i < 8; i++) {
-                const line = document.createElement('div');
-                line.className = 'grid-line vertical';
-                line.style.left = (i * spacing) + 'px';
-                line.style.animationDelay = (i * 0.1) + 's';
-                gridBg.appendChild(line);
-            }
-
-            // Horizontal lines
-            for (let i = 0; i < 5; i++) {
-                const line = document.createElement('div');
-                line.className = 'grid-line';
-                line.style.top = ((i + 1) * 20) + '%';
-                line.style.width = '100%';
-                line.style.animationDelay = (i * 0.2) + 's';
-                gridBg.appendChild(line);
-            }
-        }
-
-        generateGrid();
-
-        // ===== GSAP TEXT ANIMATIONS =====
-        gsap.from('.announcement', {
-            opacity: 0,
-            y: 20,
-            duration: 0.8,
-            delay: 0.2
-        });
-
-        gsap.from('.word', {
-            opacity: 0,
-            y: 30,
-            blur: 10,
-            stagger: 0.1,
-            duration: 0.6,
-            ease: 'power2.out'
-        });
-
-        gsap.from('p', {
-            opacity: 0,
-            y: 20,
-            duration: 0.8,
-            delay: 0.8
-        });
-
-        gsap.from('.cta-buttons', {
-            opacity: 0,
-            y: 20,
-            duration: 0.8,
-            delay: 1
-        });
-
-        // ===== SCROLL INDICATOR CLICK =====
-        document.querySelector('.scroll-indicator').addEventListener('click', () => {
-            window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
-        });
-
-        // Hide scroll indicator on scroll
-        window.addEventListener('scroll', () => {
-            const indicator = document.querySelector('.scroll-indicator');
-            if (window.scrollY > 100) {
-                indicator.style.opacity = '0';
-                indicator.style.pointerEvents = 'none';
-            } else {
-                indicator.style.opacity = '1';
-                indicator.style.pointerEvents = 'auto';
-            }
-        });
-
-        // ===== VIDEO SWITCHING =====
-        let currentVideo = 1;
-        const heroVideo = document.querySelector('.hero-video');
-
-        heroVideo.addEventListener('ended', () => {
-            currentVideo = currentVideo === 1 ? 2 : 1;
-            const newSrc = `tech-bg-0${currentVideo}.mp4`;
-            heroVideo.innerHTML = `<source src="${newSrc}" type="video/mp4">`;
-            heroVideo.load();
-            heroVideo.play();
-        });
-    </script>
+<style>
+  @keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(8px);} }
+</style>
 </body>
 </html>

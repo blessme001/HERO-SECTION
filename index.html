@@ -38,8 +38,6 @@
   /* ===== GLASSMORPHISM CORE ===== */
   .glass {
     background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
     border: 1px solid rgba(255,255,255,0.1);
   }
   .glass-red {
@@ -150,7 +148,7 @@
   </video>
 
   <!-- Lighter overlay: just enough for text contrast, video stays clearly visible -->
-  <div class="absolute inset-0 z-[2] pointer-events-none" style="background:radial-gradient(circle at 50% 50%, rgba(10,22,40,.05), rgba(10,22,40,.4));"></div>
+  <div class="absolute inset-0 z-[2] pointer-events-none" style="background:radial-gradient(circle at 50% 50%, rgba(10,22,40,0), rgba(10,22,40,.15));"></div>
 
   <div class="grid-bg absolute inset-0 z-[1] opacity-40" id="grid-bg"></div>
 

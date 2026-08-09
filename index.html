@@ -145,7 +145,7 @@
 <!-- ============ HERO (STICKY PARALLAX) ============ -->
 <div class="relative" style="height: 200vh;">
 <section id="hero" class="sticky top-0 w-full h-screen flex items-center justify-center overflow-hidden">
-  <video id="heroVideo" autoplay muted playsinline loop webkit-playsinline="true" x5-playsinline="true" preload="auto" class="hero-video">
+  <video id="heroVideo" autoplay muted playsinline loop webkit-playsinline="true" x5-playsinline="true" preload="auto" class="hero-video" style="background:#0a1628;">
     <source src="tech-bg-01.mp4" type="video/mp4">
   </video>
 
@@ -481,6 +481,18 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* ===== BULLETPROOF VIDEO PLAY ===== */
+  const heroVideoEl = document.getElementById('heroVideo');
+  heroVideoEl.muted = true;
+  heroVideoEl.defaultMuted = true;
+  const forcePlay = () => { heroVideoEl.play().catch(() => {}); };
+  forcePlay();
+  window.addEventListener('load', forcePlay);
+  document.addEventListener('DOMContentLoaded', forcePlay);
+  document.addEventListener('touchstart', forcePlay, { once: true });
+  document.addEventListener('click', forcePlay, { once: true });
+  document.addEventListener('scroll', forcePlay, { once: true });
 
   /* ===== NAV SCROLL STATE ===== */
   window.addEventListener('scroll', () => {

@@ -38,6 +38,8 @@
   /* ===== GLASSMORPHISM CORE ===== */
   .glass {
     background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255,255,255,0.1);
   }
   .glass-red {
@@ -96,8 +98,7 @@
   .grid-line { position:absolute; background:linear-gradient(90deg,transparent,rgba(220,53,69,.5) 50%,transparent); animation:flow-h 8s linear infinite; }
   .grid-line.vertical { width:1px; height:100%; background:linear-gradient(180deg,transparent,rgba(220,53,69,.4) 50%,transparent); animation:flow-v 8s linear infinite; }
 
-  /* Hero video now renders at full opacity for max visibility */
-  .hero-video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:1; z-index:0; }
+  .hero-video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.7; z-index:0; }
 
   /* Carousel */
   .carousel-slide { position:absolute; inset:0; opacity:0; transition:opacity .5s ease; }
@@ -141,14 +142,10 @@
   </div>
 </nav>
 
-<!-- ============ HERO ============ -->
-<section class="relative w-full h-screen flex items-center justify-center overflow-hidden">
-  <video autoplay muted playsinline loop class="hero-video">
-    <source src="tech-bg-01.mp4" type="video/mp4">
-  </video>
+<!-- ============ HERO (FIXED PARALLAX) ============ -->
+<section id="hero" class="fixed top-0 left-0 w-full h-screen flex items-center justify-center overflow-hidden z-10" style="background: linear-gradient(135deg, #050d1a 0%, #0a1628 40%, #1a2f4a 100%);">
 
-  <!-- Lighter overlay: just enough for text contrast, video stays clearly visible -->
-  <div class="absolute inset-0 z-[2] pointer-events-none" style="background:radial-gradient(circle at 50% 50%, rgba(10,22,40,0), rgba(10,22,40,.15));"></div>
+  <div class="absolute inset-0 z-[2] pointer-events-none" style="background:radial-gradient(circle at 50% 50%, rgba(10,22,40,.3), rgba(10,22,40,.75));"></div>
 
   <div class="grid-bg absolute inset-0 z-[1] opacity-40" id="grid-bg"></div>
 
@@ -167,7 +164,7 @@
     </p>
 
     <div class="flex flex-wrap gap-4 justify-center reveal" style="transition-delay:.3s">
-      <a href="#projects" class="px-8 py-3.5 rounded-xl font-display font-bold text-xs uppercase tracking-widest text-white shadow-lg transition-all hover:-translate-y-1"
+      <a href="#about" class="px-8 py-3.5 rounded-xl font-display font-bold text-xs uppercase tracking-widest text-white shadow-lg transition-all hover:-translate-y-1"
          style="background:linear-gradient(135deg,#ff6b7a,#dc3545); box-shadow:0 8px 32px rgba(220,53,69,.35);">
         View My Work
       </a>
@@ -188,9 +185,10 @@
   </div>
 </section>
 
-<style>
-  @keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(8px);} }
-</style>
+<!-- ===== CONTENT WRAPPER (scrolls over fixed hero with smooth fade) ===== -->
+<div class="relative z-20" style="margin-top: 100vh; position: relative;">
+  <!-- Gradient fade-in mask at top of content -->
+  <div class="absolute -top-40 inset-x-0 h-40 pointer-events-none z-30" style="background: linear-gradient(to bottom, rgba(5,13,26,0), rgba(5,13,26,0.9));"></div>
 
 <!-- ============ ABOUT ============ -->
 <section id="about" class="relative py-24 px-6 lg:px-12">
@@ -395,25 +393,85 @@
   </div>
 </section>
 
-<!-- ============ FOOTER ============ -->
-<footer class="relative border-t border-white/10 py-10 px-6 lg:px-12">
-  <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-6">
-    <div>
-      <div class="font-display font-extrabold text-lg"><span class="grad-text">BMS</span> <span class="text-beige">TECH</span></div>
-      <div class="text-xs text-beige/40 mt-1">Tech Support · Web Dev · Device Consulting</div>
+<!-- ============ FOOTER (REACTOR STYLE) ============ -->
+<footer class="relative py-20 px-6 lg:px-12" style="background: rgba(255,255,255,0.015); border-top: 1px solid rgba(255,255,255,0.06);">
+  <div class="max-w-7xl mx-auto">
+    
+    <!-- Newsletter + Socials -->
+    <div class="mb-16 max-w-2xl">
+      <h3 class="font-display font-bold text-2xl md:text-3xl mb-6 text-beige">Stay up-to-date with BMS Tech</h3>
+      <div class="flex gap-3 mb-8">
+        <input type="email" placeholder="Your email" class="flex-1 bg-white/95 text-navy-deep px-6 py-4 rounded-xl font-body text-sm placeholder-navy-deep/50 focus:outline-none">
+        <button class="px-8 py-4 rounded-xl font-display font-bold bg-beige text-navy-deep hover:bg-beige/90 transition-all shadow-lg">→</button>
+      </div>
+      <div class="flex gap-4">
+        <a href="https://twitter.com" target="_blank" class="w-10 h-10 flex items-center justify-center rounded-lg glass-red hover:bg-crimson/20 transition text-beige/70 hover:text-crimson-light">𝕏</a>
+        <a href="https://linkedin.com" target="_blank" class="w-10 h-10 flex items-center justify-center rounded-lg glass-red hover:bg-crimson/20 transition text-beige/70 hover:text-crimson-light">in</a>
+        <a href="https://github.com" target="_blank" class="w-10 h-10 flex items-center justify-center rounded-lg glass-red hover:bg-crimson/20 transition text-beige/70 hover:text-crimson-light">⚙️</a>
+      </div>
     </div>
-    <div class="flex gap-6 text-sm text-beige/50">
-      <a href="#about" class="hover:text-crimson-light transition">About</a>
-      <a href="#projects" class="hover:text-crimson-light transition">Projects</a>
-      <a href="#services" class="hover:text-crimson-light transition">Services</a>
-      <a href="https://wa.me/2348155586606" target="_blank" class="hover:text-crimson-light transition">WhatsApp</a>
-      <a href="#contact" class="hover:text-crimson-light transition">Contact</a>
+
+    <!-- 4-Column Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-16 pb-16 border-b border-white/10">
+      
+      <!-- Services -->
+      <div>
+        <h4 class="font-display font-bold text-lg text-beige mb-6">Services</h4>
+        <ul class="space-y-3 text-sm text-beige/60">
+          <li><a href="#services" class="hover:text-crimson-light transition">Web Development</a></li>
+          <li><a href="#services" class="hover:text-crimson-light transition">Tech Support</a></li>
+          <li><a href="#services" class="hover:text-crimson-light transition">Device Consulting</a></li>
+          <li><a href="#services" class="hover:text-crimson-light transition">Solar Solutions</a></li>
+        </ul>
+      </div>
+
+      <!-- Projects -->
+      <div>
+        <h4 class="font-display font-bold text-lg text-beige mb-6">Projects</h4>
+        <ul class="space-y-3 text-sm text-beige/60">
+          <li><a href="#projects" class="hover:text-crimson-light transition">Solar Calculator</a></li>
+          <li><a href="#projects" class="hover:text-crimson-light transition">Inventory App</a></li>
+          <li><a href="#projects" class="hover:text-crimson-light transition">MedSupply Platform</a></li>
+          <li><a href="#projects" class="hover:text-crimson-light transition">PayLink</a></li>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div>
+        <h4 class="font-display font-bold text-lg text-beige mb-6">Company</h4>
+        <ul class="space-y-3 text-sm text-beige/60">
+          <li><a href="#about" class="hover:text-crimson-light transition">About</a></li>
+          <li><a href="#gallery" class="hover:text-crimson-light transition">Gallery</a></li>
+          <li><a href="#contact" class="hover:text-crimson-light transition">Contact</a></li>
+          <li><a href="https://wa.me/2348155586606" target="_blank" class="hover:text-crimson-light transition">WhatsApp</a></li>
+        </ul>
+      </div>
+
+      <!-- Legal -->
+      <div>
+        <h4 class="font-display font-bold text-lg text-beige mb-6">Legal</h4>
+        <ul class="space-y-3 text-sm text-beige/60">
+          <li><a href="#" class="hover:text-crimson-light transition">Terms of Service</a></li>
+          <li><a href="#" class="hover:text-crimson-light transition">Privacy Policy</a></li>
+          <li><a href="#" class="hover:text-crimson-light transition">Cookie Settings</a></li>
+          <li><a href="#" class="hover:text-crimson-light transition">Data Rights</a></li>
+        </ul>
+      </div>
     </div>
-  </div>
-  <div class="max-w-6xl mx-auto border-t border-white/10 mt-8 pt-6 text-center text-xs text-beige/30">
-    © <span id="year"></span> BMS Tech. All rights reserved. Built with care in Nigeria 🇳🇬
+
+    <!-- Copyright + Logo -->
+    <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+      <div class="text-sm text-beige/40">
+        © <span id="year"></span> BMS Tech. All rights reserved. Built in Nigeria 🇳🇬
+      </div>
+      <div class="font-display font-extrabold text-4xl md:text-5xl tracking-tighter">
+        <span class="grad-text">BMS</span><br><span class="text-beige">TECH</span>
+      </div>
+    </div>
   </div>
 </footer>
+
+</div> <!-- Close content wrapper -->
 
 <button id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="fixed bottom-7 right-7 z-40 w-12 h-12 rounded-full glass-red text-crimson-light flex items-center justify-center opacity-0 pointer-events-none transition-all shadow-xl">↑</button>
 
@@ -467,14 +525,27 @@
   }
   generateGrid();
 
-  /* ===== HERO VIDEO SWITCH ===== */
-  let currentVideo = 1;
-  const heroVideo = document.querySelector('.hero-video');
-  heroVideo.addEventListener('ended', () => {
-    currentVideo = currentVideo === 1 ? 2 : 1;
-    heroVideo.innerHTML = `<source src="tech-bg-0${currentVideo}.mp4" type="video/mp4">`;
-    heroVideo.load();
-    heroVideo.play();
+  /* ===== GRADIENT ANIMATION ===== */
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes gradientShift {
+      0%, 100% { background: linear-gradient(135deg, #050d1a 0%, #0a1628 40%, #1a2f4a 100%); }
+      50% { background: linear-gradient(135deg, #0a1628 0%, #1a2f4a 40%, #25405f 100%); }
+    }
+    @keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(8px);} }
+  `;
+  document.head.appendChild(style);
+
+  /* ===== PARALLAX HERO FADE EFFECT ===== */
+  const hero = document.getElementById('hero');
+  const heroContent = hero.querySelector('.relative.z-\\[3\\]');
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const heroHeight = window.innerHeight;
+    const opacity = Math.max(0, 1 - (scrolled / (heroHeight * 0.8)));
+    const scale = Math.max(0.9, 1 - (scrolled / (heroHeight * 1.5)));
+    heroContent.style.opacity = opacity;
+    heroContent.style.transform = `scale(${scale})`;
   });
 
   document.querySelector('.scroll-indicator').addEventListener('click', () => {
